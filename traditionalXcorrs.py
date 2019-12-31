@@ -1,3 +1,5 @@
+# Written by Eileen R. Martin
+
 import obspy
 import numpy as np
 import time

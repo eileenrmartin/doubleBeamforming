@@ -1,11 +1,10 @@
+# Written by Eileen R. Martin
+
 import obspy
 import numpy as np
 import scipy.fftpack as ft
-from setupParams9 import *
+from setupParams import *
 
-
-
-channel = channels[0] # just 'BHZ' for now
 
 startWindow = start
 nRejected = 0

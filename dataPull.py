@@ -1,6 +1,8 @@
+# Written by Eileen R. Martin
+
 import obspy
 from obspy.clients.fdsn import Client
-from setupParams9 import *
+from setupParams import *
 
 
 
@@ -10,7 +12,6 @@ from setupParams9 import *
 #print(inventory)
 
 fourFrqCorners = [0.001,1.0/150.0, 15, 20] # frquency filter
-channel = channels[0]
 startWindow = start 
 while startWindow < endTime:
 	for station in stationsA:

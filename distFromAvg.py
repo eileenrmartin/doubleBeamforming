@@ -1,3 +1,5 @@
+# Written by Eileen R. Martin
+
 import math
 import numpy as np
 import obspy

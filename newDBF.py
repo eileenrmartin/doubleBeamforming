@@ -1,6 +1,7 @@
+# Written by Eileen R. Martin
+
 import obspy
 import numpy as np
-import matplotlib.pyplot as plt
 import time
 import sys
 import scipy.fftpack as ft
@@ -69,7 +70,7 @@ slownessesB[:,:,1] = np.outer(uB,np.sin(ThB))
 
 
 
-# loop over 4 hour windows
+# just process first 4 hour window (if you want to do all windows, just loop over as in preprocessing.py and increase startWindow by 4 hours each loop)
 startWindow = start
 
 
@@ -79,14 +80,14 @@ startWindow = start
 startTimePhase1 = time.time()
 
 # array patch A calculations
-RA = DBFFuncs.phase1(stationsA,nFrq,frqs,nTrunc,locationsA,slownessesA,NuA,NThA,filenameGenerator,startWindow)
+RA = DBFFuncs.phase1(stationsA,frqs,nTrunc,locationsA,slownessesA,filenameGenerator,startWindow)
 
 print('done with phase 1 patch A at time '+str(time.time()-startTimePhase1))
 
 print('starting phase 1 patch B')
 
 # array patch B calculations
-RB = DBFFuncs.phase1(stationsB,nFrq,frqs,nTrunc,locationsB,slownessesB,NuB,NThB,filenameGenerator,startWindow)
+RB = DBFFuncs.phase1(stationsB,frqs,nTrunc,locationsB,slownessesB,filenameGenerator,startWindow)
 
 timingPhase1 = time.time() - startTimePhase1
 print("Phase 1 is complete. \n Time phase 1: "+str(timingPhase1))
@@ -95,7 +96,7 @@ print("Phase 1 is complete. \n Time phase 1: "+str(timingPhase1))
 # ----------------------------phase 2---------------------
 startTimePhase2 = time.time()
 
-B = DBFFuncs.phase2(RA,RB,NuA,NThA,NuB,NThB,Nt)
+B = DBFFuncs.phase2(RA,RB,Nt)
 
 timingPhase2 = time.time() - startTimePhase2
 print("Phase 2 is complete. \n Time phase 2: "+str(timingPhase2))
@@ -105,7 +106,10 @@ print("Phase 2 is complete. \n Time phase 2: "+str(timingPhase2))
 timingNewDBF = time.time()-startTimeNewDBF
 print('Double Beamforming is complete. \n Total Time : '+str(timingNewDBF))
 
-# write outputs
+
+
+
+# ------------------write outputs, timing-----------------
 outfile = sys.argv[1]
 np.savez_compressed(outfile, B=B, uA=uA, ThA=ThA, uB=uB, ThB=ThB)
 plaintxt_outfile = outfile+'-plaintxt.txt'

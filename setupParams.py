@@ -1,3 +1,5 @@
+# Written by Eileen R. Martin
+
 import obspy
 from obspy.clients.fdsn import Client
 

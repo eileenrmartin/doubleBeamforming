@@ -3,3 +3,4 @@
 *.mseed
 inter-results/*.txt
 inter-results/*.npz
+timing-results/*.txt
