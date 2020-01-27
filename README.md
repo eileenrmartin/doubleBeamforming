@@ -12,7 +12,7 @@ Use the rules in the Makefile (in order) to run each part of the traditional and
 ## These codes were written and tested using: 
 * Python 3.7.3
 * Numpy version 1.16.2
-* Scipy version 1.2.1 (used for fftpack)
+* Scipy version 1.2.1 (used for fftpack, commands could easily be replaced)
 * Obspy version 1.1.0
 * Matplotlib version 3.0.3
 * Numba version 0.43.1
