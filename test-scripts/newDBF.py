@@ -37,8 +37,8 @@ startTimeNewDBF = time.time()
 
 
 # need locations of stations (in meters relative to center of each array)
-locationsA = dbf.calcDistFromAvg(filenamesA,'data/coordinatesA'+str(nSensors)+'.txt') # no. of sensors in A x 2 
-locationsB = dbf.calcDistFromAvg(filenamesB,'data/coordinatesB'+str(nSensors)+'.txt') # no. of sensors in B x 2
+locationsA = dbf.calcDistFromAvg(filenamesA,'test-scripts/data/coordinatesA'+str(nSensors)+'.txt') # no. of sensors in A x 2 
+locationsB = dbf.calcDistFromAvg(filenamesB,'test-scripts/data/coordinatesB'+str(nSensors)+'.txt') # no. of sensors in B x 2
 
 
 # bookkeeping frequencies

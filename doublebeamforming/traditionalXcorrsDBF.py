@@ -1,8 +1,8 @@
 # Written by Eileen R. Martin
-#from arrays import *
+
 import numpy as np
 import obspy
-#from distFromAvg import calcDistFromAvg
+from distFromAvg import calcDistFromAvg
 
 
 def xCorrsAcrossArrays(arrayPatchA, arrayPatchB, maxTau):
@@ -84,6 +84,8 @@ def DBFAfterXcorrs(arrayPatchA, arrayPatchB, xcorrs, Nt):
 	# get stations and filenames from both array patches
 	stationsA = arrayPatchA.stations
 	stationsB = arrayPatchB.stations
+	nA = len(stationsA)
+	nB = len(stationsB)
 	listOfFilenamesA = arrayPatchA.filenames
 	listOfFilenamesB = arrayPatchB.filenames
 	# need locations of stations (in meters relative to center of each array)

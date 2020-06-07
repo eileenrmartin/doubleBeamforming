@@ -11,11 +11,11 @@ installDBF:
 # NOTE: This must be run before all other tests.
 
 grabData:
-	python dataPull.py
+	python test-scripts/dataPull.py
 
 preprocessData:
-	python dailyEnergy.py test-scripts/inter-results/dailyEnergy_
-	python preprocessing.py 
+	python test-scripts/dailyEnergy.py test-scripts/inter-results/dailyEnergy_
+	python test-scripts/preprocessing.py 
 
 
 # ---------------------------------------------------------
@@ -26,7 +26,7 @@ traditionalXcorrs9:
 	python test-scripts/traditionalXcorrs.py test-scripts/inter-results/xcorrs9 test-scripts/inter-results/oldXcorrtiming_9.txt 9
 
 traditionalDBFOnly9:
-	python traditionalDBF.py test-scripts/inter-results/xcorrs9.npz test-scripts/inter-results/serialTraditionalResults4 4 4 4 4 9
+	python test-scripts/traditionalDBF.py test-scripts/inter-results/xcorrs9.npz test-scripts/inter-results/serialTraditionalResults4 4 4 4 4 test-scripts/timing-results/oldDBFtiming.txt 9
 
 traditionalDBFFull9:
 	make traditionalXcorrs9

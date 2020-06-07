@@ -21,6 +21,11 @@ xcorrFile = sys.argv[1]
 loadedArrs = np.load(xcorrFile)
 xcorrs = loadedArrs['xcorrs'] # actual cross correlations (sensor A, sensor B, time lag)
 
+# figure out how many time lags there are
+nTimesXcorrs = xcorrs.shape[2]
+# starting time lag IDs
+t = np.arange(int(nTimesXcorrs/2)-int(Nt/2),int(nTimesXcorrs/2)+int(Nt/2))
+
 # for output
 outfile = sys.argv[2]
 
@@ -42,14 +47,14 @@ NThB = int(sys.argv[6]) # 6 degrees per subset on B
 ThB = np.linspace(-np.pi/2,np.pi/2,num=NThB)
 
 # create arrayPatch objects
-arrayA = dbf.arrayPatch(stationsA, uA, ThA, dtValueA, filenamesA)
-arrayB = dbf.arrayPatch(stationsB, uB, ThB, dtValueB, filenamesB)
+arrayA = dbf.arrayPatch(stationsA, uA, ThA, dtValueA, listOfFilenamesA, 'test-scripts/data/coordinatesA'+str(nSensors)+'.txt')
+arrayB = dbf.arrayPatch(stationsB, uB, ThB, dtValueB, listOfFilenamesB, 'test-scripts/data/coordinatesB'+str(nSensors)+'.txt')
 
 #start timing
 startDBFTime = time.time()
 
 # actually do the double beamforming transofrm
-B = dbf.DBFAfterXcorrs(arrayPatchA, arrayPatchB, xcorrs, Nt)
+B = dbf.DBFAfterXcorrs(arrayA, arrayB, xcorrs, Nt)
 
 # end timing
 timingDBF = time.time() - startDBFTime

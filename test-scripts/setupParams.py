@@ -10,7 +10,7 @@ stationsB = ['Y24A', 'Y25A', 'Y26A', 'Z24A', 'Z25A', 'Z26A', '124A', '125A', '12
 channel = 'BHZ'
 
 
-datapath = 'data/' # where data will be stored locally after pulling
+datapath = 'test-scripts/data/' # where data will be stored locally after pulling, relative to directory with Makefile
 
 # able to pull a month of data
 start = obspy.UTCDateTime("2009-11-01T00:00:00.000")
