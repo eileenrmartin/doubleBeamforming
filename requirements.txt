@@ -1,0 +1,10 @@
+These codes were written and tested using:
+* pip Python package manager
+* Python 3.7.6
+* Numpy version 1.18.1
+* Scipy version 1.4.1 (used for fftpack, commands could easily be replaced w/ numpy FFTs that are slower)
+* Obspy version 1.2.1
+* Matplotlib version 3.1.3
+* Numba version 0.48.0
+
+Be sure you have all of these before trying to run the tests provided.
