@@ -3,7 +3,7 @@ These codes were written and tested using:
 * Python 3.7.6
 * Numpy version 1.18.1
 * Scipy version 1.4.1 (used for fftpack, commands could easily be replaced w/ numpy FFTs that are slower)
-* Obspy version 1.2.1
+* Obspy version 1.2.1 (installation instructions at https://github.com/obspy/obspy/wiki#installation)
 * Matplotlib version 3.1.3
 * Numba version 0.48.0
 

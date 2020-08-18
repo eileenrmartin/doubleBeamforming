@@ -11,6 +11,7 @@ from numba import jit
 @jit(nopython=True) # this command allows some optimizations over for loops with lots of numpy operations
 def shiftFrqData(thisLoc,slownesses,frqs,dataF,Nu,NTh,nFrq):
 	# This script calculates the R factor for an array due to a particular sensor.
+	# See equations 4 and 5 of "A Linear Algorithm for Ambient Seismic Noise Double Beamforming Without Explicit Crosscorrelations"
 	#
 	# INPUTS:
 	# thisLoc, a 1D numpy array with 2 entries (x and y coordinates in meters) describing location of the sensor
@@ -28,20 +29,22 @@ def shiftFrqData(thisLoc,slownesses,frqs,dataF,Nu,NTh,nFrq):
 
 
 
-
+	# each time lag is a tau value in eq. 4 and 5
 	timeLags = slownesses[:,:,0]*thisLoc[0] + slownesses[:,:,1]*thisLoc[1] # no. of slownesses x no of angles (u dot x-x_c)
 	timeLagsFrqs = np.zeros((Nu,NTh,nFrq))
 	for iu in range(Nu): # loop over slownesses
 		for ith in range(NTh): # loop over angles
-			timeLagsFrqs[iu,ith,:] = timeLags[iu,ith]*frqs
+			timeLagsFrqs[iu,ith,:] = timeLags[iu,ith]*frqs # each frq is an omega in eq. 4 and 5
 	# timeLagsFrqs should be no. of slownesses x no of angles x nFrq
 	shifts = np.exp(-2*np.pi*1j*timeLagsFrqs) # no. of slownesses x no of angles x nFrq
 	RUpdate = np.multiply(shifts,dataF) # phase shift of rrquency domain data and stack
+	#RUpdate now holds \hat{d}(\omega,x)e^{-2\pi i \tau(x,u) \omega} in eq. 4 and 5
 	return RUpdate
 
 
 def phase1(stations,frqs,nTrunc,locations,slownesses,funcToGenerateFilenames,startWindow):
 	# This calculates the R factor for one array patch for a given time window.
+	# See phase 1 in algorithm 1 of "A Linear Algorithm for Ambient Seismic Noise Double Beamforming Without Explicit Crosscorrelations"
 	#
 	# INPUTS:
 	# stations, a list of station names (often this is a 4 letter/digit code)
@@ -77,23 +80,24 @@ def phase1(stations,frqs,nTrunc,locations,slownesses,funcToGenerateFilenames,sta
 	 	print('\t at station '+station+ ' and time '+str(time.time()-startTime))
 	 	filename = funcToGenerateFilenames(station,startWindow)
 	 	st = obspy.read(filename)
-	 	# fourier transform of data (truncated to be power of 2)
-	 	dataF = ft.fft(st[0].data,nTrunc) # not supported by numba jit currently
+	 	# fourier transform of data, so it is \hat{d} needed in eq. 4 and 5 (truncated to be power of 2)
+	 	dataF = ft.fft(st[0].data,nTrunc) # current inefficiency: not supported by numba jit currently
 	 	# create array of shift factors 
 	 	RUpdate = shiftFrqData(locations[i,:],slownesses,frqs,dataF,Nu,NTh,nFrq)
-	 	R = R + RUpdate
-	return R/len(stations)
+	 	R = R + RUpdate # sum over all stations in eq. 4 and 5
+	return R/len(stations) # normalize by number of stations (at this point, it's really what's in eq. 4 and 5 fully)
 
 
 def phase2(RA,RB,Nt):
 	# Calculate the double beamforming transform for one window given R factors for 
-	# the A and B arrays.
+	# the A and B arrays. 
+	# See phase 2 in algorithm 1 of "A Linear Algorithm for Ambient Seismic Noise Double Beamforming Without Explicit Crosscorrelations"
 	#
 	# INPUTS:
 	# RA, 3D numpy array (NuA,NThA,number of frequencies), R factor for A 
-	#	array in this time window
+	#	array in this time window, as in  eq. 4
 	# RB, 3D numpy array (NuB,NThB,number of frequencies), R factor for B 
-	#	array in this time window
+	#	array in this time window, as in eq. 5
 	# Nt, integer number of time lags of interest in the double beamforming transform
 	#
 	# OUTPUTS:
@@ -118,8 +122,13 @@ def phase2(RA,RB,Nt):
 			ThisRABTemp = np.zeros((NuB,NThB,Nt))
 			for iuB in range(NuB):
 				for iThB in range(NThB):
+					# calculate beta(omega) in algorithm 1 (frq. domain cross-correlation of both arrays' R factors)
 					ThisBFrqTemp =  np.multiply(ThisRASection,np.conj(RB[iuB,iThB,:]))
+					# go back to the time domain, so it's time-domain cross-correlation of both  arrays' R factors.
 					ThisBTimeTemp = np.real(ft.ifft(ThisBFrqTemp)) # not supported by numba jit currently
+					# Note, currently ordered as 0 to +, then - to 0 time lags. 
+					# Must reorder so axes are  aligned from - to 0 to + time lags.
 					ThisRABTemp[iuB,iThB,:] = np.hstack((ThisBTimeTemp[-int(Nt/2):],ThisBTimeTemp[:int(Nt/2)]))
-			BTemp[iuA,iThA,:,:,:] = ThisRABTemp
+			BTemp[iuA,iThA,:,:,:] = ThisRABTemp 
+			# Now BTemp is the full b array for a single time window, as described at the end of algorithm 1.
 	return BTemp

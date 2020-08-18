@@ -129,12 +129,12 @@ fullSlownessScaling:
 # ----------------------------------------------------------
 # cleanup intermediate and final results
 clean:
-	rm -f inter-results/*.txt
-	rm -f inter-results/*.npz
-	rm -f timing-results/*.txt
-	rm -f fig/*.pdf
+	rm -f test-scripts/inter-results/*.txt
+	rm -f test-scripts/inter-results/*.npz
+	rm -f test-scripts/timing-results/*.txt
+	rm -f test-scripts/fig/*.pdf
 
 # cleanup all pulled data, intermediate and final results
 burn:
-	rm -f data/*.mseed
+	rm -f test-scripts/data/*.mseed
 	make clean

@@ -14,7 +14,7 @@ datapath = 'test-scripts/data/' # where data will be stored locally after pullin
 
 # able to pull a month of data
 start = obspy.UTCDateTime("2009-11-01T00:00:00.000")
-endTime = obspy.UTCDateTime("2009-11-30T23:59:59.000")
+endTime = obspy.UTCDateTime("2009-11-01T03:59:59.000") # just pull one window of data
 initWindowHrs = 24
 initWindowSec = initWindowHrs*60*60 # for one channel on 18 stations, this means 6*39.6 MB data per window
 

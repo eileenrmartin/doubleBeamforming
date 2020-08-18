@@ -19,6 +19,7 @@ def calcDistFromAvg(listOfFilenames, fileWithCoords=''):
 		infile = open(fileWithCoords,"r")
 		allLines = infile.readlines()
 		for id,line in enumerate(allLines):
+			# get the latitude and longitude values stored in  a 2D numpy array of floats
 			nameLatLong = line.split()
 			latString = (nameLatLong[1]).strip()
 			latLong[id,0] = math.radians(float(latString))
@@ -30,12 +31,15 @@ def calcDistFromAvg(listOfFilenames, fileWithCoords=''):
 			latLong[id,0] = math.radians(st[0].stats.coordinates.latitude)
 			latLong[id,1] = math.radians(st[0].stats.coordinates.longitude)
 	
-	avgLatLong = np.mean(latLong,axis=0) # [avg latitude, avg longitude]
+	# get center of the array [avg latitude, avg longitude]
+	avgLatLong = np.mean(latLong,axis=0) 
+
+	# basic info about earth's curvature and latitude line in middle of array
 	earthRadiusInMeters = 6371000
 	avgLatCircumference = np.absolute(earthRadiusInMeters*2*np.pi*np.cos(avgLatLong[0]))# circumference of straight across circle on earth
 
 	for id in range(len(listOfFilenames)):
-		# apply Haversine distance formula https://en.wikipedia.org/wiki/Haversine_formula
+		# apply Haversine distance formula to get approximate distance in meters from center of the array, see: https://en.wikipedia.org/wiki/Haversine_formula
 		latDiff = latLong[id,0] - avgLatLong[0]
 		distFromAvg[id,0] = earthRadiusInMeters*latDiff
 		longDiff = latLong[id,1] - avgLatLong[1]

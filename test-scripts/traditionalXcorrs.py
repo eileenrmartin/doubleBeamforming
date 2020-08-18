@@ -24,8 +24,8 @@ dtValueA = dummytraceA[0].stats.delta # time between samples, array A
 dtValueB = dummytraceB[0].stats.delta # time between samples, array B (should match A)
 
 # create arrayPatch objects
-dummyU = np.array([0]) # dummy array of slownesses, don't use in this part of example
-dummyTh = np.array([0]) # dummy array of angles, don't use in this part of example
+dummyU = np.array([0]) # dummy array of slownesses, don't use in this cross-correlation part of example (just in 2nd part w/ slant stacks)
+dummyTh = np.array([0]) # dummy array of angles, don't use in this cross-correlation part of example (just in 2nd  part w/ slant stacks)
 arrayA = dbf.arrayPatch(stationsA, dummyU, dummyTh, dtValueA, filenamesA, 'data/coordinatesA'+str(nSensors)+'.txt')
 arrayB = dbf.arrayPatch(stationsB, dummyU, dummyTh, dtValueB, filenamesB, 'data/coordinatesB'+str(nSensors)+'.txt')
 

@@ -5,7 +5,6 @@ import numpy as np
 import time
 import sys
 import scipy.fftpack as ft
-from distFromAvg import calcDistFromAvg
 from setupParams import *
 import doublebeamforming as dbf
 
